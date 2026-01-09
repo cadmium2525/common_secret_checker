@@ -341,8 +341,8 @@
 
         async function loadPresets() {
             const HIGH_THRESH_TRAITS = [
-                "六英雄杯・煌", "六英雄杯・翠", "六英雄杯・恐",
-                "六英雄杯・海", "六英雄杯・空", "六英雄杯・陸"
+                "六英雄杯・煌", "六英雄杯・翠", "六英雄杯・蒼",
+                "六英雄杯・紅", "六英雄杯・冥", "六英雄杯・琥"
             ];
 
             for (const [name, base64] of Object.entries(PRESET_DATA)) {
@@ -352,7 +352,7 @@
                 });
 
                 // Determine threshold
-                let thresh = 0.75;
+                let thresh = 0.7;
                 if (HIGH_THRESH_TRAITS.includes(name)) thresh = 0.85;
 
                 if (!check) {
@@ -402,10 +402,10 @@
         const TRAIT_THRESHOLDS = {
             "六英雄杯・煌": 0.85,
             "六英雄杯・翠": 0.85,
-            "六英雄杯・恐": 0.85,
-            "六英雄杯・海": 0.85,
-            "六英雄杯・空": 0.85,
-            "六英雄杯・陸": 0.85
+            "六英雄杯・蒼": 0.85,
+            "六英雄杯・紅": 0.85,
+            "六英雄杯・冥": 0.85,
+            "六英雄杯・琥": 0.85
         };
         const DEFAULT_THRESHOLD = 0.7;
 
@@ -901,7 +901,8 @@
             const canvas = cropper.getCroppedCanvas();
             const base64 = canvas.toDataURL('image/png');
 
-            db.transaction([STORE_NAME], 'readwrite').objectStore(STORE_NAME).put({ name: name, image: base64, isPreset: false, threshold: 0.75 });
+            const defaultThreshold = name.includes("六英雄杯") ? 0.85 : 0.7;
+            db.transaction([STORE_NAME], 'readwrite').objectStore(STORE_NAME).put({ name: name, image: base64, isPreset: false, threshold: defaultThreshold });
 
             closeCropper();
             renderTraitList();
@@ -922,7 +923,7 @@
                     const t = traits[i];
                     const item = document.createElement('div');
                     item.className = "flex flex-col gap-2 glass p-3 rounded-xl border border-slate-800 hover:border-indigo-500/30 transition-all group";
-                    const thresh = t.threshold || 0.75;
+                    const thresh = t.threshold || 0.7;
                     item.innerHTML = `
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
